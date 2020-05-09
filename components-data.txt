@@ -1,0 +1,28 @@
+BookListItem
+- title
+- authors
+- shelf
+- thumbnail
+- shelfOptions
+
+BookList
+- books
+- shelfOptions
+
+BookShelf
+- name
+- books
+- shelfOptions
+
+BookShelfList
+- books
+
+BookSearchBar
+- searchText (state)
+- onSearch
+
+BookSearch
+- books (state)
+
+App
+- books (state)
