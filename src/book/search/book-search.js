@@ -1,6 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
-import * as BooksAPI from '../../BooksAPI'
+import * as BooksAPI from '../../BooksAPI';
+import BookSearchBar from './book-search-bar';
+import BookList from '../list/book-list';
+
+const SHELFS = {
+    currentlyReading: 'Currently Reading',
+    wantToRead: 'Want to Read',
+    read: 'Read'
+}
 
 class BookSearch extends React.Component {
 
@@ -10,8 +17,16 @@ class BookSearch extends React.Component {
 
     search = searchText => {
         BooksAPI.search(searchText)
-            .then(books => console.log(books));
-      }
+            .then(this.onSearchResults);
+    }
+
+    onSearchResults = results => {
+        if (Array.isArray(results)) {
+            this.setState({ books: results });
+        } else {
+            this.setState({ books: [] });
+        }
+    }
     
     handleSearchChange = e => {
         if (e.target.value.length > 2) {
@@ -22,23 +37,9 @@ class BookSearch extends React.Component {
     render() {
         return (
             <div className="search-books">
-                <div className="search-books-bar">
-                    <Link to='/' className='close-search'/>
-                    <div className="search-books-input-wrapper">
-                        {/*
-                        NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                        You can find these search terms here:
-                        https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                        However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                        you don't find a specific author or title. Every search is limited by search terms.
-                        */}
-                        <input type="text" onChange={this.handleSearchChange} placeholder="Search by title or author"/>
-
-                    </div>
-                </div>
+                <BookSearchBar onSearchChange={this.handleSearchChange} />
                 <div className="search-books-results">
-                    <ol className="books-grid"></ol>
+                <BookList shelfOptions={SHELFS} books={this.state.books}/>
                 </div>
             </div>
         );
